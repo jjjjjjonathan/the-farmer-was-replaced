@@ -11,8 +11,9 @@ last_i = -1
 
 def main():
     global last_i
+    start = get_time()
 
-    while True:
+    while get_time() - start <= 11111:
         while not farm_utils.enough_power():
             sunflowers.farm()
         while farm_utils.enough_power():
