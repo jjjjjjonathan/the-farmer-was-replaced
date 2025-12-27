@@ -79,13 +79,12 @@ def plant_friends(entity, world_size):
             plant(entity)
         move(East)
 
-
 def use_fertilizer(entity):
-    if entity not in constants.NO_FERT:
+    if enough_fertilizer() and not regaining_fertilizer() and entity not in constants.NO_FERT:
         use_item(Items.Fertilizer)
 
 def use_weird_substance(entity):
-    if entity not in constants.NO_FERT:
+    if enough_fertilizer() and not regaining_fertilizer() and entity not in constants.NO_FERT:
         use_item(Items.Weird_Substance)
 	
 def never_stop():

@@ -3,12 +3,9 @@ from constants import WS
 
 ws = WS
 
-def stop_grass_polyculture():
-    return not farm_utils.enough_power()
-
 def polyculture_farm_grass():
     farm_utils.plant_friends(Entities.Bush, ws)
-    farm_utils.plant_polyculture_crops(Entities.Grass, ws, Entities.Bush, stop_grass_polyculture)
+    farm_utils.plant_polyculture_crops(Entities.Grass, ws, Entities.Bush, farm_utils.enough_power)
 
 def farm():
     while farm_utils.enough_power():
