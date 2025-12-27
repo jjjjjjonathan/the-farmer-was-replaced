@@ -15,8 +15,11 @@ def farm_sunflower_row(petal_num):
         move(East)
 
 def farm():
+    navigation.go(0,1)
+    ground_at_0_1 = get_ground_type()
     navigation.go(0,0)
-    if get_ground_type() != Grounds.Soil:
+    ground_at_0_0 = get_ground_type()
+    if ground_at_0_0 != Grounds.Soil or ground_at_0_1 != Grounds.Soil:
         farm_utils.till_all(ws)
     while num_items(Items.Power) < constants.MAX_POWER:
         navigation.go(0,0)
