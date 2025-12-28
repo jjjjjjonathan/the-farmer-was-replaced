@@ -141,6 +141,8 @@ def farm_polyculture_row(entity, world_size, companion, stop = never_stop):
             break
         while regaining_fertilizer():
             plant_polyculture_crops(entity, world_size, companion, True)
+            if not enough_power():
+                break
 
 def farm_polyculture_row_no_fert(entity, world_size, companion, stop = never_stop):
     while not stop():
