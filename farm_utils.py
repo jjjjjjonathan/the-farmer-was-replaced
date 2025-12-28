@@ -79,12 +79,12 @@ def plant_friends(entity, world_size):
             plant(entity)
         move(East)
 
-def use_fertilizer(entity):
-    if enough_fertilizer() and not regaining_fertilizer() and entity not in constants.NO_FERT:
+def use_fertilizer(entity, is_recharging):
+    if not is_recharging and entity not in constants.NO_FERT:
         use_item(Items.Fertilizer)
 
-def use_weird_substance(entity):
-    if enough_fertilizer() and not regaining_fertilizer() and entity not in constants.NO_FERT:
+def use_weird_substance(entity, is_recharging):
+    if not is_recharging and entity not in constants.NO_FERT:
         use_item(Items.Weird_Substance)
 	
 def never_stop():
@@ -98,36 +98,49 @@ def match_entity_to_item(entity):
     if entity == Entities.Carrot:
         return Items.Carrot
 
-def plant_polyculture_crops(entity, world_size, companion, stop = never_stop):
-    while not stop():
-        for _ in range(world_size):
-            if is_even_tile(get_pos_x(), get_pos_y()):
-                waiting_for_poly_crop = True
-                while waiting_for_poly_crop:
-                    if get_entity_type() != entity:
-                        if entity != Entities.Grass:
-                            plant(entity)
-                        maintain_water_level()
-                    plant_friend, (fx, fy) = get_companion()
-                    
-                    if plant_friend == companion and not is_even_tile(fx, fy):
-                        while not can_harvest():
-                            use_fertilizer(entity)
-                            use_weird_substance(entity)
-                        harvest()
-                        if entity != Entities.Grass:
-                            plant(entity)
-                        maintain_water_level()
-                        waiting_for_poly_crop = False
-                    else:
-                        harvest()
-            move(East)
+def plant_polyculture_crops(entity, world_size, companion, is_recharging):
+    for _ in range(world_size):
+        if is_even_tile(get_pos_x(), get_pos_y()):
+            waiting_for_poly_crop = True
+            while waiting_for_poly_crop:
+                if get_entity_type() != entity:
+                    if entity != Entities.Grass:
+                        plant(entity)
+                    maintain_water_level()
+                plant_friend, (fx, fy) = get_companion()
+                
+                if plant_friend == companion and not is_even_tile(fx, fy):
+                    if not can_harvest():
+                        use_fertilizer(entity, is_recharging)
+                        use_weird_substance(entity, is_recharging)
+                    while not can_harvest():
+                        pass
+                    harvest()
+                    if entity != Entities.Grass:
+                        plant(entity)
+                    maintain_water_level()
+                    waiting_for_poly_crop = False
+                else:
+                    harvest()
+        move(East)
 
 def random_index(list_length):
     return random() * list_length // 1
 
 def enough_power():
     return num_items(Items.Power) >= constants.MIN_POWER
+
+def farm_polyculture_row(entity, world_size, companion, stop = never_stop):
+    while not stop():
+        while enough_fertilizer():
+            while not regaining_fertilizer():
+                plant_polyculture_crops(entity, world_size, companion, False)
+                break
+            break
+        if not enough_power():
+            break
+        while regaining_fertilizer():
+            plant_polyculture_crops(entity, world_size, companion, True)
 
 def enough_fertilizer():
     return num_items(Items.Fertilizer) >= constants.MIN_FERTILIZER
