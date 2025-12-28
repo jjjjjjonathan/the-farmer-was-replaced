@@ -3,9 +3,12 @@ from constants import WS
 
 ws = WS
 
+def not_enough_power():
+    return not farm_utils.enough_power()
+
 def polyculture_farm_grass():
     while farm_utils.enough_power():
-        farm_utils.plant_polyculture_crops(Entities.Grass, ws, Entities.Bush, True)
+        farm_utils.farm_polyculture_row_no_fert(Entities.Grass, ws, Entities.Bush, not_enough_power)
 
 def need_friends():
     farm_utils.plant_friends(Entities.Bush, ws)

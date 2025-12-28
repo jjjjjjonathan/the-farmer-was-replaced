@@ -142,6 +142,10 @@ def farm_polyculture_row(entity, world_size, companion, stop = never_stop):
         while regaining_fertilizer():
             plant_polyculture_crops(entity, world_size, companion, True)
 
+def farm_polyculture_row_no_fert(entity, world_size, companion, stop = never_stop):
+    while not stop():
+        plant_polyculture_crops(entity, world_size, companion, True)
+
 def enough_fertilizer():
     return num_items(Items.Fertilizer) >= constants.MIN_FERTILIZER
 
