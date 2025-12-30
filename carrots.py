@@ -19,6 +19,7 @@ def farm():
             farm_utils.till_checkerboard(Grounds.Soil)
         navigation.go(0,1)
         if get_entity_type() != Entities.Grass:
+            navigation.go(0,0)
             farm_utils.spawn_drones(need_friends, North, ws)
         navigation.go(0,0)
         farm_utils.spawn_drones(polyculture_farm_carrots, North, ws)
