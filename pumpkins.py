@@ -1,9 +1,9 @@
-import navigation, farm_utils
+import navigation, farm_utils, drone_utils
 
 clear()
 change_hat(Hats.Golden_Pumpkin_Hat)
 ws = get_world_size()
-farm_utils.till_all(ws)
+farm_utils.till_all()
 
 def plant_initial_pumpkin_row():
     row = list()

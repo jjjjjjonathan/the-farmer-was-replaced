@@ -1,26 +1,4 @@
-import constants, navigation
-
-def wait_for_all_drones(drone_set):
-    while len(drone_set) > 0:
-        removed_drones = []
-        for drone in drone_set:
-            if has_finished(drone):
-                removed_drones.append(drone)
-        for removed_drone in removed_drones:
-            drone_set.remove(removed_drone)
-
-def spawn_drones(callback, direction, world_size = get_world_size()):
-    drones = set()
-    for _ in range(world_size):
-        drone = None
-        if num_drones() < world_size:
-            drone = spawn_drone(callback)
-        if not drone:
-            callback()
-        else:
-            drones.add(drone)
-        move(direction)
-    wait_for_all_drones(drones)
+import constants, navigation, drone_utils
 
 def validate_ground(ground_type):
     if get_ground_type() != ground_type:
@@ -33,8 +11,8 @@ def till_row():
         validate_ground(Grounds.Soil)
         move(East)
 
-def till_all(world_size):
-    spawn_drones(till_row, North, world_size)
+def till_all():
+    drone_utils.spawn_drones(till_row, North)
 
 def till_checkerboard_row(ground_type):
     for _ in range(constants.WS):
@@ -45,7 +23,7 @@ def till_checkerboard_row(ground_type):
 def till_checkerboard(ground_type):
     def task():
         till_checkerboard_row(ground_type)
-    spawn_drones(task, North, constants.WS)
+    drone_utils.spawn_drones(task, North)
 
 def maintain_water_level(water_level = 0.75):
     if get_water() < water_level:
@@ -68,12 +46,12 @@ def clear_field():
 
 def clean():
     navigation.go(0,0)
-    spawn_drones(clear_field, North, constants.WS)
+    drone_utils.spawn_drones(clear_field, North)
 
 def is_even_tile(x, y):
     return (x + y) % 2 == 0
 
-def plant_friends(entity, world_size):
+def plant_friends(entity, world_size = constants.WS):
     for _ in range(world_size):
         if not is_even_tile(get_pos_x(), get_pos_y()):
             plant(entity)
@@ -98,7 +76,7 @@ def match_entity_to_item(entity):
     if entity == Entities.Carrot:
         return Items.Carrot
 
-def plant_polyculture_crops(entity, world_size, companion, is_recharging):
+def plant_polyculture_crops(entity, companion, is_recharging, world_size = constants.WS):
     for _ in range(world_size):
         if is_even_tile(get_pos_x(), get_pos_y()):
             waiting_for_poly_crop = True
@@ -130,18 +108,18 @@ def random_index(list_length):
 def enough_power():
     return num_items(Items.Power) >= constants.MIN_POWER
 
-def farm_polyculture_row(entity, world_size, companion, stop = never_stop):
+def farm_polyculture_row(entity, companion, stop = never_stop):
     while not stop():
         while not stop_polyculture():
-            plant_polyculture_crops(entity, world_size, companion, False)        
+            plant_polyculture_crops(entity, companion, False)        
         if not enough_power():
             break
         while regaining_fertilizer() and enough_power():
-            plant_polyculture_crops(entity, world_size, companion, True)
+            plant_polyculture_crops(entity, companion, True)
 
-def farm_polyculture_row_no_fert(entity, world_size, companion, stop = never_stop):
+def farm_polyculture_row_no_fert(entity, companion, stop = never_stop):
     while not stop():
-        plant_polyculture_crops(entity, world_size, companion, True)
+        plant_polyculture_crops(entity, companion, True)
 
 def enough_fertilizer():
     return num_items(Items.Fertilizer) >= constants.MIN_FERTILIZER

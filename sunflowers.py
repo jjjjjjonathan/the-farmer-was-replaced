@@ -1,4 +1,4 @@
-import navigation, farm_utils, constants
+import navigation, farm_utils, constants, drone_utils
 
 ws = get_world_size()
 
@@ -20,13 +20,13 @@ def farm():
     navigation.go(0,0)
     ground_at_0_0 = get_ground_type()
     if ground_at_0_0 != Grounds.Soil or ground_at_0_1 != Grounds.Soil:
-        farm_utils.till_all(ws)
+        farm_utils.till_all()
     while num_items(Items.Power) < constants.MAX_POWER:
         navigation.go(0,0)
-        farm_utils.spawn_drones(plant_sunflower_row, North, ws)
+        drone_utils.spawn_drones(plant_sunflower_row, North)
         navigation.go(0,0)
         for i in range(15, 6, -1):
             def task():
                 farm_sunflower_row(i)
-            farm_utils.spawn_drones(task, North, ws)
+            drone_utils.spawn_drones(task, North)
     

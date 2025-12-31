@@ -1,4 +1,4 @@
-import navigation, farm_utils, constants
+import navigation, farm_utils, constants, drone_utils
 
 def leaderboard_run(yes):
     if yes:
@@ -46,13 +46,13 @@ def farm(is_lb_run):
                 curr = measure()
                 y_now = get_pos_y()
     
-    farm_utils.till_all(ws)
+    farm_utils.till_all()
     
     while leaderboard_run(is_lb_run):
         navigation.go(0,0)
-        farm_utils.spawn_drones(plant_and_sort_cacti_row, North, ws)
+        drone_utils.spawn_drones(plant_and_sort_cacti_row, North)
         navigation.go(0,0)
-        farm_utils.spawn_drones(sort_cacti_column, East, ws)
+        drone_utils.spawn_drones(sort_cacti_column, East)
         harvest()
 
 farm(False)

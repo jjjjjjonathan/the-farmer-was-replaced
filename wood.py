@@ -1,4 +1,4 @@
-import navigation, farm_utils, constants
+import navigation, farm_utils, constants, drone_utils
 
 ws = constants.WS
 
@@ -22,14 +22,14 @@ def need_friends():
 
 def polyculture_farm_wood():
     while not farm_utils.stop_polyculture():
-        farm_utils.plant_polyculture_crops(Entities.Tree, ws, Entities.Grass, False)
+        farm_utils.plant_polyculture_crops(Entities.Tree, Entities.Grass, False)
 
 def farm():
     if farm_utils.start_and_continue_polyculture():
         navigation.go(0,1)
         if get_entity_type() != Entities.Grass:
-            farm_utils.spawn_drones(need_friends, North, ws)
+            drone_utils.spawn_drones(need_friends, North)
         navigation.go(0,0)
-        farm_utils.spawn_drones(polyculture_farm_wood, North, ws)
+        drone_utils.spawn_drones(polyculture_farm_wood, North)
     navigation.go(0,0)
-    farm_utils.spawn_drones(farm_regular_wood, North, ws)
+    drone_utils.spawn_drones(farm_regular_wood, North)

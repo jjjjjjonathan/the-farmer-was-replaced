@@ -1,9 +1,9 @@
-import navigation, farm_utils
+import navigation, farm_utils, drone_utils
 
 clear()
 ws = get_world_size()
 change_hat(Hats.Golden_Cactus_Hat)
-farm_utils.till_all(ws)
+farm_utils.till_all()
 
 def plant_cacti_row():
     for _ in range(ws):
@@ -46,7 +46,7 @@ def sort_cacti_column():
 
 while True:
     navigation.go(0,0)
-    farm_utils.spawn_drones(plant_and_sort_cacti_row, North, ws)
+    drone_utils.spawn_drones(plant_and_sort_cacti_row, North)
     navigation.go(0,0)
-    farm_utils.spawn_drones(sort_cacti_column, East, ws)
+    drone_utils.spawn_drones(sort_cacti_column, East)
     harvest()

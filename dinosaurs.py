@@ -1,8 +1,8 @@
-import navigation
+import navigation, constants
 
 clear()
 change_hat(Hats.Dinosaur_Hat)
-ws = get_world_size()
+ws = constants.WS
 
 while True:
     for x in range(ws):
