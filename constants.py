@@ -6,4 +6,6 @@ MAX_POWER = 100000
 
 NO_FERT = [Entities.Grass, Entities.Bush]
 
+ENTITIES = [Entities.Cactus, Entities.Carrot, Entities.Grass, Entities.Tree, Entities.Bush, Entities.Pumpkin, Entities.Sunflower]
+
 WS = get_world_size()

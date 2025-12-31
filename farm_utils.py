@@ -5,7 +5,7 @@ def validate_ground(ground_type):
         till()
 
 def till_row():
-    for _ in range(get_world_size()):
+    for _ in range(constants.WS):
         if can_harvest():
             harvest()
         validate_ground(Grounds.Soil)
@@ -33,11 +33,9 @@ def maintain_water_level(water_level = 0.75):
 def get_substance(maze_size):
     return maze_size * 2**(num_unlocked(Unlocks.Mazes) - 1)
 
-entities = [Entities.Cactus, Entities.Carrot, Entities.Grass, Entities.Tree, Entities.Bush, Entities.Pumpkin, Entities.Sunflower]
-
 def clear_field():
     for _ in range(constants.WS):
-        while get_entity_type() in entities:
+        while get_entity_type() in constants.ENTITIES:
             if can_harvest():
                 harvest()
             if get_entity_type() == Entities.Grass:
